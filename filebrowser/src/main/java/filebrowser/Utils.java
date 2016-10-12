@@ -7,21 +7,21 @@ import android.os.Environment;
 import java.io.File;
 import java.io.IOException;
 
-class Utils {
+public class Utils {
 
     private Utils() {
     }
 
-    static boolean isExternalStorageReadable() {
+    public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
-    static boolean isExternalStorageWritable() {
+    public static boolean isExternalStorageWritable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-    static Intent createOpenFileIntent(File file) throws IOException {
+    public static Intent createOpenFileIntent(File file) throws IOException {
         Uri uri = Uri.fromFile(file);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         // Check what kind of file you are trying to open, by comparing the url with extensions.
