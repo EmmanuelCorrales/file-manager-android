@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
         if (fragment != null) {
-            ((FilesFragment) fragment).navigateParentDirectory();
+            ((filebrowser.FileBrowserFragment) fragment).navigateParentDirectory();
         }
     }
 }
