@@ -17,14 +17,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.File;
-import java.io.IOException;
 
 public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemClickedListener {
+
+    public interface OnFileClickedListener {
+        void OnFileClicked(File file);
+    }
+
     public static final String TAG = FileBrowserFragment.class.getSimpleName();
 
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 34783;
 
     private FileAdapter mFileAdapter;
+    private OnFileClickedListener mOnFileClickedListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,12 +73,8 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
     public void onClickFile(final File file) {
         if (file.isDirectory()) {
             changeDirectory(file);
-        } else {
-            try {
-                startActivity(Utils.createOpenFileIntent(file));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } else if (mOnFileClickedListener != null) {
+            mOnFileClickedListener.OnFileClicked(file);
         }
     }
 
@@ -81,6 +82,10 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
         if (!atHomeDirectory()) {
             changeDirectory(mFileAdapter.getDirectory().getParentFile());
         }
+    }
+
+    public void setOnFileClickedListener(OnFileClickedListener onFileClickedListener) {
+        mOnFileClickedListener = onFileClickedListener;
     }
 
     private void initRecyclerView() {
