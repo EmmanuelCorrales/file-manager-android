@@ -1,4 +1,4 @@
-package com.emmanuelcorrales.filebrowser;
+package filebrowser;
 
 import org.junit.Test;
 

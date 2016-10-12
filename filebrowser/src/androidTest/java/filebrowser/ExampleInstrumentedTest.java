@@ -1,4 +1,4 @@
-package com.emmanuelcorrales.filebrowser;
+package filebrowser;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
