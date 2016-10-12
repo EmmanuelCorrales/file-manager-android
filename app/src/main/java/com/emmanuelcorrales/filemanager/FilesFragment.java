@@ -68,10 +68,9 @@ public class FilesFragment extends Fragment implements FileAdapter.OnFileClicked
     }
 
     @Override
-    public void onClickFile(File file) {
+    public void onClickFile(final File file) {
         if (file.isDirectory()) {
-            mFileAdapter.setDirectory(file);
-            mFileAdapter.notifyDataSetChanged();
+            changeDirectory(file);
         } else {
             try {
                 startActivity(Utils.createOpenFileIntent(file));
@@ -81,15 +80,35 @@ public class FilesFragment extends Fragment implements FileAdapter.OnFileClicked
         }
     }
 
+    void navigateParentDirectory() {
+        if (!atHomeDirectory()) {
+            changeDirectory(mFileAdapter.getDirectory().getParentFile());
+        }
+    }
+
     private void initRecyclerView() {
-        Log.d(TAG, "Initialize RecyclerView");
         if (!Utils.isExternalStorageReadable()) {
             Log.d(TAG, "External storage is not readable.");
             return;
         }
         mFileAdapter = new FileAdapter(Environment.getExternalStorageDirectory(), this);
-        RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mFileAdapter);
+    }
+
+    private void changeDirectory(File dir) {
+        if (dir == null) {
+            throw new IllegalArgumentException("Argument 'dir' cannot be null.");
+        }
+        if (!dir.isDirectory()) {
+            throw new IllegalArgumentException("Argument 'dir' must be a directory.");
+        }
+        mFileAdapter.setDirectory(dir);
+        mFileAdapter.notifyDataSetChanged();
+    }
+
+    private boolean atHomeDirectory() {
+        return mFileAdapter.getDirectory().equals(Environment.getExternalStorageDirectory());
     }
 }

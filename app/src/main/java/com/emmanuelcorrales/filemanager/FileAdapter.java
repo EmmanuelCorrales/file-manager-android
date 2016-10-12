@@ -60,6 +60,10 @@ class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         mCurrentDir = dir;
     }
 
+    File getDirectory() {
+        return mCurrentDir;
+    }
+
     private void setOnFileClickedListener(OnFileClickedListener listener) {
         if (listener == null) {
             throw new IllegalArgumentException("Argument 'listener' cannot be null.");
