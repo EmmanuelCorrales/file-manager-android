@@ -11,16 +11,16 @@ import java.io.File;
 
 class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
-    interface OnFileClickedListener {
+    interface OnItemClickedListener {
         void onClickFile(File file);
     }
 
     private File mCurrentDir;
-    private OnFileClickedListener mOnFileClickedListener;
+    private OnItemClickedListener mOnItemClickedListener;
 
-    FileAdapter(File dir, OnFileClickedListener onFileClickedListener) {
-        setDirectory(dir);
-        setOnFileClickedListener(onFileClickedListener);
+    FileAdapter(File directory, OnItemClickedListener onItemClickedListener) {
+        setDirectory(directory);
+        setOnFileClickedListener(onItemClickedListener);
     }
 
     @Override
@@ -38,8 +38,8 @@ class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
             @Override
             public void onClick(View v) {
-                if (mOnFileClickedListener != null) {
-                    mOnFileClickedListener.onClickFile(file);
+                if (mOnItemClickedListener != null) {
+                    mOnItemClickedListener.onClickFile(file);
                 }
             }
         });
@@ -64,11 +64,11 @@ class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         return mCurrentDir;
     }
 
-    private void setOnFileClickedListener(OnFileClickedListener listener) {
+    private void setOnFileClickedListener(OnItemClickedListener listener) {
         if (listener == null) {
             throw new IllegalArgumentException("Argument 'listener' cannot be null.");
         }
-        mOnFileClickedListener = listener;
+        mOnItemClickedListener = listener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

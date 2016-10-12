@@ -1,6 +1,5 @@
 package filebrowser;
 
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -20,7 +19,7 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.io.IOException;
 
-public class FileBrowserFragment extends Fragment implements FileAdapter.OnFileClickedListener {
+public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemClickedListener {
     public static final String TAG = FileBrowserFragment.class.getSimpleName();
 
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 34783;
