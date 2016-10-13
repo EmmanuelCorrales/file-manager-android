@@ -21,6 +21,16 @@ public class Utils {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
+    public static boolean isExternalStorageRoot(File directory) {
+        if (directory == null) {
+            throw new IllegalArgumentException("Argument 'directory' cannot be null.");
+        }
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException("Argument 'directory' should be a directory.");
+        }
+        return directory.equals(Environment.getExternalStorageDirectory());
+    }
+
     public static Intent createOpenFileIntent(File file) throws IOException {
         Uri uri = Uri.fromFile(file);
         Intent intent = new Intent(Intent.ACTION_VIEW);
