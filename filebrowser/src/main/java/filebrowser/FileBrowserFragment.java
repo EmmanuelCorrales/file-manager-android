@@ -79,7 +79,7 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
     }
 
     public void navigateParentDirectory() {
-        if (!atHomeDirectory()) {
+        if (!Utils.isExternalStorageRoot(mFileAdapter.getDirectory())) {
             changeDirectory(mFileAdapter.getDirectory().getParentFile());
         }
     }
@@ -108,9 +108,5 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
         }
         mFileAdapter.setDirectory(dir);
         mFileAdapter.notifyDataSetChanged();
-    }
-
-    private boolean atHomeDirectory() {
-        return mFileAdapter.getDirectory().equals(Environment.getExternalStorageDirectory());
     }
 }
