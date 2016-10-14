@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.io.File;
 
-class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
+class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserAdapter.ViewHolder> {
 
     interface OnItemClickedListener {
         void onClickFile(File file);
@@ -18,7 +18,7 @@ class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     private File mCurrentDir;
     private OnItemClickedListener mOnItemClickedListener;
 
-    FileAdapter(File directory, OnItemClickedListener onItemClickedListener) {
+    FileBrowserAdapter(File directory, OnItemClickedListener onItemClickedListener) {
         setDirectory(directory);
         setOnFileClickedListener(onItemClickedListener);
     }

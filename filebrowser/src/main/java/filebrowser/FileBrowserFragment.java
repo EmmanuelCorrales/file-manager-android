@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 
 import java.io.File;
 
-public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemClickedListener {
+public class FileBrowserFragment extends Fragment implements FileBrowserAdapter.OnItemClickedListener {
 
     public interface OnFileClickedListener {
         void OnFileClicked(File file);
@@ -28,7 +28,7 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
 
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 34783;
 
-    private FileAdapter mFileAdapter;
+    private FileBrowserAdapter mFileBrowserAdapter;
     private OnFileClickedListener mOnFileClickedListener;
 
     @Override
@@ -79,8 +79,8 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
     }
 
     public void navigateParentDirectory() {
-        if (!Utils.isExternalStorageRoot(mFileAdapter.getDirectory())) {
-            changeDirectory(mFileAdapter.getDirectory().getParentFile());
+        if (!Utils.isExternalStorageRoot(mFileBrowserAdapter.getDirectory())) {
+            changeDirectory(mFileBrowserAdapter.getDirectory().getParentFile());
         }
     }
 
@@ -93,10 +93,10 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
             Log.d(TAG, "External storage is not readable.");
             return;
         }
-        mFileAdapter = new FileAdapter(Environment.getExternalStorageDirectory(), this);
+        mFileBrowserAdapter = new FileBrowserAdapter(Environment.getExternalStorageDirectory(), this);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(mFileAdapter);
+        recyclerView.setAdapter(mFileBrowserAdapter);
     }
 
     private void changeDirectory(File dir) {
@@ -106,7 +106,7 @@ public class FileBrowserFragment extends Fragment implements FileAdapter.OnItemC
         if (!dir.isDirectory()) {
             throw new IllegalArgumentException("Argument 'dir' must be a directory.");
         }
-        mFileAdapter.setDirectory(dir);
-        mFileAdapter.notifyDataSetChanged();
+        mFileBrowserAdapter.setDirectory(dir);
+        mFileBrowserAdapter.notifyDataSetChanged();
     }
 }
