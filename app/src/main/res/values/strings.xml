@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">File Manager</string>
-    <string name="snackbar_close_txt">Close File Manager?</string>
+    <string name="app_name">EMC File Manager</string>
+    <string name="snackbar_close_txt">Close EMC File Manager?</string>
     <string name="snackbar_close_btn">CLOSE</string>
 </resources>
