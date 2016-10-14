@@ -68,12 +68,15 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(TAG, "onRequestPermissionsResult()");
+        
         switch (requestCode) {
             case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "Permission granted.");
                     initRecyclerView();
+                } else {
+                    Log.d(TAG, "Permission not granted. Closing the app.");
+                    getActivity().finish();
                 }
                 break;
 
