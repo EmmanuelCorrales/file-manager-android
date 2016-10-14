@@ -2,6 +2,8 @@ package com.emmanuelcorrales.filemanager;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +20,7 @@ import java.util.List;
 
 import filebrowser.Utils;
 
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         FilesFragment.OnFileClickedListener, FilesFragment.OnDirectoryClickedListener {
 
     private List<FilesFragment> mFragmentList = new ArrayList<>();
@@ -43,7 +46,16 @@ public class MainActivity extends AppCompatActivity implements
     public void onBackPressed() {
         if (mPager.getCurrentItem() > 0) {
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        } else {
+            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+            Snackbar.make(coordinatorLayout, R.string.snackbar_close_txt, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.snackbar_close_btn, this).show();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        finish();
     }
 
     @Override
