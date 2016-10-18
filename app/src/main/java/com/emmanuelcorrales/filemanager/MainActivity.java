@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FilesFragment.OnFileClickedListener, FilesFragment.OnDirectoryClickedListener {
 
     private List<FilesFragment> mFragmentList = new ArrayList<>();
+    private boolean mSnackbarShowing = false;
     private ViewPager mPager;
 
     @Override
@@ -46,10 +47,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         if (mPager.getCurrentItem() > 0) {
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        } else {
+        } else if (!mSnackbarShowing) {
             CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
             Snackbar.make(coordinatorLayout, R.string.snackbar_close_txt, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.snackbar_close_btn, this).show();
+                    .setAction(R.string.snackbar_close_btn, this).setCallback(new Snackbar.Callback() {
+
+                @Override
+                public void onShown(Snackbar snackbar) {
+                    super.onShown(snackbar);
+                    mSnackbarShowing = true;
+                }
+
+                @Override
+                public void onDismissed(Snackbar snackbar, int event) {
+                    super.onDismissed(snackbar, event);
+                    mSnackbarShowing = false;
+                }
+            }).show();
         }
     }
 
