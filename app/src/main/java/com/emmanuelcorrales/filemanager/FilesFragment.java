@@ -34,12 +34,16 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
     public static final String TAG = FilesFragment.class.getSimpleName();
 
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 34783;
+    private static final String KEY_DIRECTORY_PATH = "key_directory_path";
 
     private FilesAdapter mFilesAdapter;
     private FilesFragment.OnFileClickedListener mOnFileClickedListener;
     private OnDirectoryClickedListener mOnDirectoryClickedListener;
 
     public static FilesFragment newInstance(File directory) {
+        if (directory == null) {
+            throw new IllegalArgumentException("Argument 'directory' cannot be null.");
+        }
         FilesFragment filesFragment = new FilesFragment();
         filesFragment.mFilesAdapter = new FilesAdapter(directory, filesFragment);
         return filesFragment;
@@ -61,19 +65,19 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
         } else {
-            initRecyclerView();
+            initRecyclerView(savedInstanceState);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        
+
         switch (requestCode) {
             case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "Permission granted.");
-                    initRecyclerView();
+                    initRecyclerView(null);
                 } else {
                     Log.d(TAG, "Permission not granted. Closing the app.");
                     getActivity().finish();
@@ -84,6 +88,12 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
                 Log.d(TAG, "Permission not granted.");
                 break;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(KEY_DIRECTORY_PATH, mFilesAdapter.getDirectory().getAbsolutePath());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -107,10 +117,15 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
         return mFilesAdapter.getDirectory();
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView(@Nullable Bundle savedInstanceState) {
         if (!Utils.isExternalStorageReadable()) {
             Log.d(TAG, "External storage is not readable.");
             return;
+        }
+        if (savedInstanceState != null) {
+            String path = savedInstanceState.getString(KEY_DIRECTORY_PATH);
+            File directory = new File(path);
+            mFilesAdapter = new FilesAdapter(directory, this);
         }
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(filebrowser.R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
