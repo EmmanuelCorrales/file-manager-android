@@ -10,30 +10,27 @@ import java.io.File;
 import java.util.List;
 
 class DirectoriesStatePagerAdapter extends FragmentStatePagerAdapter {
-    private List<File> mFiles;
+    private List<File> mDirectories;
     private FilesFragment.OnDirectoryClickedListener mOnDirectoryClickedListener;
     private FilesFragment.OnFileClickedListener mOnFileClickedListener;
 
-    DirectoriesStatePagerAdapter(FragmentManager fm, List<File> files,
+    DirectoriesStatePagerAdapter(FragmentManager fm, List<File> directories,
                                  @Nullable FilesFragment.OnDirectoryClickedListener onDirectoryClickedListener,
                                  @Nullable FilesFragment.OnFileClickedListener onFileClickedListener) {
         super(fm);
-        if (files == null) {
-            throw new IllegalArgumentException("Argument 'files' cannot be null.");
-        }
-        mFiles = files;
+        setDirectories(directories);
         mOnDirectoryClickedListener = onDirectoryClickedListener;
         mOnFileClickedListener = onFileClickedListener;
     }
 
     @Override
     public Fragment getItem(int i) {
-        return createFilesFragment(mFiles.get(i));
+        return createFilesFragment(mDirectories.get(i));
     }
 
     @Override
     public int getCount() {
-        return mFiles.size();
+        return mDirectories.size();
     }
 
     @Override
@@ -41,7 +38,7 @@ class DirectoriesStatePagerAdapter extends FragmentStatePagerAdapter {
         if (position == 0) {
             return "Internal Storage";
         }
-        return mFiles.get(position).getName();
+        return mDirectories.get(position).getName();
     }
 
     @Override
@@ -49,7 +46,20 @@ class DirectoriesStatePagerAdapter extends FragmentStatePagerAdapter {
         return POSITION_NONE;
     }
 
+    public void setDirectories(List<File> directories) {
+        if (directories == null) {
+            throw new IllegalArgumentException("Argument directories cannot be null");
+        }
+        mDirectories = directories;
+    }
+
     private FilesFragment createFilesFragment(File directory) {
+        if (directory == null) {
+            throw new IllegalArgumentException("Argument directory cannot be null");
+        }
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException("Calling directory.isDirectory should return false.");
+        }
         FilesFragment filesFragment = FilesFragment.newInstance(directory);
         filesFragment.setOnDirectoryClickedListener(mOnDirectoryClickedListener);
         filesFragment.setOnFileClickedListener(mOnFileClickedListener);

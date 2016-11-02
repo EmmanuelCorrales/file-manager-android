@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String KEY_PATHS = "key_paths";
 
-    private List<File> mFiles = new ArrayList<>();
+    private List<File> mDirectories = new ArrayList<>();
     private boolean mSnackbarShowing = false;
     private ViewPager mPager;
 
@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (savedInstanceState != null) {
             restoreState(savedInstanceState);
         } else {
-            mFiles.add(Environment.getExternalStorageDirectory());
+            mDirectories.add(Environment.getExternalStorageDirectory());
         }
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new DirectoriesStatePagerAdapter(getSupportFragmentManager(), mFiles, this, this));
+        mPager.setAdapter(new DirectoriesStatePagerAdapter(getSupportFragmentManager(), mDirectories, this, this));
 
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(mPager, true);
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        ArrayList<String> paths = convertFilesToStrings(mFiles);
+        ArrayList<String> paths = convertFilesToStrings(mDirectories);
         outState.putStringArrayList(KEY_PATHS, paths);
         super.onSaveInstanceState(outState);
     }
@@ -88,10 +88,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void OnDirectoryClicked(File directory) {
         Log.d(TAG, "Opening directory " + directory.getAbsolutePath());
-        mFiles.subList(mPager.getCurrentItem() + 1, mFiles.size()).clear();
-        mFiles.add(directory);
-        mPager.getAdapter().notifyDataSetChanged();
-        mPager.setCurrentItem(mFiles.size() - 1);
+        mDirectories.subList(mPager.getCurrentItem() + 1, mDirectories.size()).clear();
+        mDirectories.add(directory);
+        DirectoriesStatePagerAdapter adapter = (DirectoriesStatePagerAdapter) mPager.getAdapter();
+        adapter.setDirectories(mDirectories);
+        adapter.notifyDataSetChanged();
+        mPager.setCurrentItem(mDirectories.size() - 1);
     }
 
     @Override
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void restoreState(Bundle savedInstanceState) {
         ArrayList<String> paths = savedInstanceState.getStringArrayList(KEY_PATHS);
         if (paths != null) {
-            mFiles = convertStringsToFiles(paths);
+            mDirectories = convertStringsToFiles(paths);
         }
 
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
