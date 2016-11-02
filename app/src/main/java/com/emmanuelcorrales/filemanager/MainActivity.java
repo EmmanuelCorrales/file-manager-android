@@ -6,11 +6,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import java.io.File;
@@ -23,7 +22,10 @@ import filebrowser.Utils;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         FilesFragment.OnFileClickedListener, FilesFragment.OnDirectoryClickedListener {
 
-    private List<FilesFragment> mFragmentList = new ArrayList<>();
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String KEY_PATHS = "key_paths";
+
+    private List<File> mFiles = new ArrayList<>();
     private boolean mSnackbarShowing = false;
     private ViewPager mPager;
 
@@ -35,12 +37,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mFragmentList.add(createFilesFragment(Environment.getExternalStorageDirectory()));
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        } else {
+            mFiles.add(Environment.getExternalStorageDirectory());
+        }
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new FilesStatePagerAdapter(getSupportFragmentManager()));
+        mPager.setAdapter(new DirectoriesStatePagerAdapter(getSupportFragmentManager(), mFiles, this, this));
 
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(mPager, true);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        ArrayList<String> paths = convertFilesToStrings(mFiles);
+        outState.putStringArrayList(KEY_PATHS, paths);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -74,10 +87,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void OnDirectoryClicked(File directory) {
-        mFragmentList.subList(mPager.getCurrentItem() + 1, mFragmentList.size()).clear();
-        mFragmentList.add(createFilesFragment(directory));
+        Log.d(TAG, "Opening directory " + directory.getAbsolutePath());
+        mFiles.subList(mPager.getCurrentItem() + 1, mFiles.size()).clear();
+        mFiles.add(directory);
         mPager.getAdapter().notifyDataSetChanged();
-        mPager.setCurrentItem(mFragmentList.size() - 1);
+        mPager.setCurrentItem(mFiles.size() - 1);
     }
 
     @Override
@@ -89,39 +103,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private FilesFragment createFilesFragment(File directory) {
-        FilesFragment filesFragment = FilesFragment.newInstance(directory);
-        filesFragment.setOnDirectoryClickedListener(this);
-        filesFragment.setOnFileClickedListener(this);
-        return filesFragment;
+    private void restoreState(Bundle savedInstanceState) {
+        ArrayList<String> paths = savedInstanceState.getStringArrayList(KEY_PATHS);
+        if (paths != null) {
+            mFiles = convertStringsToFiles(paths);
+        }
+
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null) {
+            for (Fragment f : fragments) {
+                if (f instanceof FilesFragment) {
+                    FilesFragment filesFragment = (FilesFragment) f;
+                    filesFragment.setOnDirectoryClickedListener(this);
+                    filesFragment.setOnFileClickedListener(this);
+                }
+            }
+        }
     }
 
-    private class FilesStatePagerAdapter extends FragmentStatePagerAdapter {
-        FilesStatePagerAdapter(FragmentManager fm) {
-            super(fm);
+    private static ArrayList<String> convertFilesToStrings(List<File> files) {
+        if (files == null) {
+            throw new IllegalArgumentException("Argument 'files' cannot be null.");
         }
+        ArrayList<String> paths = new ArrayList<>();
+        for (File file : files) {
+            paths.add(file.getAbsolutePath());
+        }
+        return paths;
+    }
 
-        @Override
-        public Fragment getItem(int i) {
-            return mFragmentList.get(i);
+    private static ArrayList<File> convertStringsToFiles(List<String> paths) {
+        if (paths == null) {
+            throw new IllegalArgumentException("Argument 'paths' cannot be null.");
         }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
+        ArrayList<File> files = new ArrayList<>();
+        for (String path : paths) {
+            files.add(new File(path));
         }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if (position == 0) {
-                return "Internal Storage";
-            }
-            return mFragmentList.get(position).getDirectory().getName();
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
+        return files;
     }
 }
