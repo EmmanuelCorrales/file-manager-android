@@ -39,6 +39,7 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
     private FilesAdapter mFilesAdapter;
     private FilesFragment.OnFileClickedListener mOnFileClickedListener;
     private OnDirectoryClickedListener mOnDirectoryClickedListener;
+    private boolean mRestored = true;
 
     public static FilesFragment newInstance(File directory) {
         if (directory == null) {
@@ -46,7 +47,19 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
         }
         FilesFragment filesFragment = new FilesFragment();
         filesFragment.mFilesAdapter = new FilesAdapter(directory, filesFragment);
+        filesFragment.mRestored = false;
         return filesFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && mRestored) {
+            String path = savedInstanceState.getString(KEY_DIRECTORY_PATH);
+            if (path != null) {
+                mFilesAdapter = new FilesAdapter(new File(path), this);
+            }
+        }
     }
 
     @Override
@@ -65,7 +78,7 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
         } else {
-            initRecyclerView(savedInstanceState);
+            initRecyclerView();
         }
     }
 
@@ -77,7 +90,7 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
             case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "Permission granted.");
-                    initRecyclerView(null);
+                    initRecyclerView();
                 } else {
                     Log.d(TAG, "Permission not granted. Closing the app.");
                     getActivity().finish();
@@ -117,15 +130,10 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
         return mFilesAdapter.getDirectory();
     }
 
-    private void initRecyclerView(@Nullable Bundle savedInstanceState) {
+    private void initRecyclerView() {
         if (!Utils.isExternalStorageReadable()) {
             Log.d(TAG, "External storage is not readable.");
             return;
-        }
-        if (savedInstanceState != null) {
-            String path = savedInstanceState.getString(KEY_DIRECTORY_PATH);
-            File directory = new File(path);
-            mFilesAdapter = new FilesAdapter(directory, this);
         }
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(filebrowser.R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
