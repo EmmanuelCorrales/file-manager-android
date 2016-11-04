@@ -25,7 +25,7 @@ class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(filebrowser.R.layout.item_file, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_file, parent, false);
         return new ViewHolder(view);
     }
 
@@ -34,7 +34,7 @@ class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.ViewHolder> {
         final File file = mDirectory.listFiles()[position];
         holder.mTextView.setText(file.getName());
         if (file.isDirectory()) {
-            holder.mIcon.setImageResource(filebrowser.R.drawable.ic_folder);
+            holder.mIcon.setImageResource(R.drawable.ic_folder);
         } else {
             holder.mIcon.setImageResource(getFileDrawable(file));
         }
@@ -112,8 +112,8 @@ class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.ViewHolder> {
 
         ViewHolder(View view) {
             super(view);
-            mTextView = (TextView) view.findViewById(filebrowser.R.id.filename);
-            mIcon = (ImageView) view.findViewById(filebrowser.R.id.icon);
+            mTextView = (TextView) view.findViewById(R.id.filename);
+            mIcon = (ImageView) view.findViewById(R.id.icon);
         }
     }
 }
