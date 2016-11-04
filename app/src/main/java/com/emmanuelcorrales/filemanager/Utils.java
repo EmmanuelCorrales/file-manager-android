@@ -99,7 +99,7 @@ public class Utils {
         } else if (file.toString().contains(".rtf")) {
             // RTF file
         } else if (file.toString().contains(".wav") || file.toString().contains(".mp3")) {
-            // WAV audio file
+            return R.drawable.ic_music;
         } else if (file.toString().contains(".gif")) {
             // GIF file
         } else if (file.toString().contains(".jpg") || file.toString().contains(".jpeg")
