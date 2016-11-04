@@ -84,4 +84,34 @@ public class Utils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
+
+    public static int getFileDrawableResource(File file) {
+        if (file.toString().contains(".doc") || file.toString().contains(".docx")) {
+            return R.drawable.ic_doc;
+        } else if (file.toString().contains(".pdf")) {
+            // PDF file
+        } else if (file.toString().contains(".ppt") || file.toString().contains(".pptx")) {
+            return R.drawable.ic_ppt;
+        } else if (file.toString().contains(".xls") || file.toString().contains(".xlsx")) {
+            return R.drawable.ic_xls;
+        } else if (file.toString().contains(".zip") || file.toString().contains(".rar")) {
+            // WAV audio file
+        } else if (file.toString().contains(".rtf")) {
+            // RTF file
+        } else if (file.toString().contains(".wav") || file.toString().contains(".mp3")) {
+            // WAV audio file
+        } else if (file.toString().contains(".gif")) {
+            // GIF file
+        } else if (file.toString().contains(".jpg") || file.toString().contains(".jpeg")
+                || file.toString().contains(".png")) {
+            return R.drawable.ic_image;
+        } else if (file.toString().contains(".txt")) {
+            // Text file
+        } else if (file.toString().contains(".3gp") || file.toString().contains(".mpg")
+                || file.toString().contains(".mpeg") || file.toString().contains(".mpe")
+                || file.toString().contains(".mp4") || file.toString().contains(".avi")) {
+            // Video files
+        }
+        return R.drawable.ic_file;
+    }
 }

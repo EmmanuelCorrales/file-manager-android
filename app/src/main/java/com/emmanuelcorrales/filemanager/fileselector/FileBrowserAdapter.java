@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.emmanuelcorrales.filemanager.R;
+import com.emmanuelcorrales.filemanager.Utils;
 
 import java.io.File;
 
@@ -38,7 +39,7 @@ class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserAdapter.ViewHol
         if (file.isDirectory()) {
             holder.mIcon.setImageResource(R.drawable.ic_folder);
         } else {
-            holder.mIcon.setImageResource(getFileDrawable(file));
+            holder.mIcon.setImageResource(Utils.getFileDrawableResource(file));
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -75,37 +76,6 @@ class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserAdapter.ViewHol
             throw new IllegalArgumentException("Argument 'listener' cannot be null.");
         }
         mOnItemClickedListener = listener;
-    }
-
-    private static int getFileDrawable(File file) {
-        if (file.toString().contains(".doc") || file.toString().contains(".docx")) {
-            return R.drawable.ic_doc;
-        } else if (file.toString().contains(".pdf")) {
-            // PDF file
-        } else if (file.toString().contains(".ppt") || file.toString().contains(".pptx")) {
-            // Powerpoint file
-            return R.drawable.ic_ppt;
-        } else if (file.toString().contains(".xls") || file.toString().contains(".xlsx")) {
-            return R.drawable.ic_xls;
-        } else if (file.toString().contains(".zip") || file.toString().contains(".rar")) {
-            // WAV audio file
-        } else if (file.toString().contains(".rtf")) {
-            // RTF file
-        } else if (file.toString().contains(".wav") || file.toString().contains(".mp3")) {
-            // WAV audio file
-        } else if (file.toString().contains(".gif")) {
-            // GIF file
-        } else if (file.toString().contains(".jpg") || file.toString().contains(".jpeg")
-                || file.toString().contains(".png")) {
-            // JPG file
-        } else if (file.toString().contains(".txt")) {
-            // Text file
-        } else if (file.toString().contains(".3gp") || file.toString().contains(".mpg")
-                || file.toString().contains(".mpeg") || file.toString().contains(".mpe")
-                || file.toString().contains(".mp4") || file.toString().contains(".avi")) {
-            // Video files
-        }
-        return R.drawable.ic_file;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
