@@ -1,4 +1,4 @@
-package filebrowser;
+package com.emmanuelcorrales.filemanager;
 
 import android.content.Intent;
 import android.net.Uri;

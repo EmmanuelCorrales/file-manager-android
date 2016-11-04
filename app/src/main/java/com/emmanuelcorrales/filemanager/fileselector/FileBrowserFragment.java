@@ -1,4 +1,4 @@
-package filebrowser;
+package com.emmanuelcorrales.filemanager.fileselector;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -15,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.emmanuelcorrales.filemanager.R;
+import com.emmanuelcorrales.filemanager.Utils;
 
 import java.io.File;
 

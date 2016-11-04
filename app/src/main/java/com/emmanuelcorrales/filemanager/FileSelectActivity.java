@@ -5,12 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
-import java.io.File;
+import com.emmanuelcorrales.filemanager.fileselector.FileBrowserFragment;
 
-import filebrowser.FileBrowserFragment;
+import java.io.File;
 
 public class FileSelectActivity extends AppCompatActivity implements FileBrowserFragment.OnFileClickedListener {
 
@@ -41,7 +40,7 @@ public class FileSelectActivity extends AppCompatActivity implements FileBrowser
     private FileBrowserFragment getFileBrowserFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
         if (fragment != null) {
-            return ((filebrowser.FileBrowserFragment) fragment);
+            return ((FileBrowserFragment) fragment);
         }
         return null;
     }

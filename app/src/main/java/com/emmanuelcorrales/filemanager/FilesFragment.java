@@ -18,8 +18,6 @@ import android.view.ViewGroup;
 
 import java.io.File;
 
-import filebrowser.Utils;
-
 
 public class FilesFragment extends Fragment implements FilesAdapter.OnItemClickedListener {
 
@@ -135,7 +133,7 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
             Log.d(TAG, "External storage is not readable.");
             return;
         }
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(filebrowser.R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mFilesAdapter);
     }

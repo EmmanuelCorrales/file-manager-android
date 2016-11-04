@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import filebrowser.Utils;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         FilesFragment.OnFileClickedListener, FilesFragment.OnDirectoryClickedListener {
 
