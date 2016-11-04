@@ -73,6 +73,8 @@ public class Utils {
                 || file.toString().contains(".mp4") || file.toString().contains(".avi")) {
             // Video files
             intent.setDataAndType(uri, "video/*");
+        } else if (file.toString().contains(".apk")) {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
         } else {
             //if you want you can also define the intent type for any other file
 
@@ -111,6 +113,8 @@ public class Utils {
                 || file.toString().contains(".mpeg") || file.toString().contains(".mpe")
                 || file.toString().contains(".mp4") || file.toString().contains(".avi")) {
             return R.drawable.ic_video;
+        } else if (file.toString().contains(".apk")) {
+            return R.drawable.ic_apk;
         }
         return R.drawable.ic_file;
     }
