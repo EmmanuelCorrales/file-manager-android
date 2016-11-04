@@ -110,7 +110,7 @@ public class Utils {
         } else if (file.toString().contains(".3gp") || file.toString().contains(".mpg")
                 || file.toString().contains(".mpeg") || file.toString().contains(".mpe")
                 || file.toString().contains(".mp4") || file.toString().contains(".avi")) {
-            // Video files
+            return R.drawable.ic_video;
         }
         return R.drawable.ic_file;
     }
