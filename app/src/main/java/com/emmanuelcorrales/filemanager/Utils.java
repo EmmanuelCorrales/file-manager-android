@@ -66,6 +66,8 @@ public class Utils {
             intent.setDataAndType(uri, "video/*");
         } else if (isAPK(file)) {
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        } else if (isCalendar(file)) {
+            intent.setDataAndType(uri, "text/calendar");
         } else {
             //if you want you can also define the intent type for any other file
 
@@ -103,6 +105,8 @@ public class Utils {
             return R.drawable.ic_video;
         } else if (isAPK(file)) {
             return R.drawable.ic_apk;
+        } else if (isCalendar(file)) {
+            return R.drawable.ic_calendar;
         }
         return R.drawable.ic_file;
     }
@@ -136,5 +140,9 @@ public class Utils {
 
     public static boolean isAPK(File file) {
         return file.toString().contains(".apk");
+    }
+
+    public static boolean isCalendar(File file) {
+        return file.toString().contains(".ics");
     }
 }
