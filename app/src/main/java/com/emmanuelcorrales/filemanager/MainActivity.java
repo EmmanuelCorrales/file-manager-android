@@ -1,5 +1,7 @@
 package com.emmanuelcorrales.filemanager;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,10 +99,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void OnFileClicked(File file) {
-        try {
-            startActivity(Utils.createOpenFileIntent(file));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (file == null) {
+            Toast.makeText(this, "Cannot select this file.", Toast.LENGTH_SHORT).show();
+        }
+        if (getIntent() != null && getIntent().getAction() != null
+                && getIntent().getAction().equals(Intent.ACTION_GET_CONTENT)) {
+            getIntent().setData(Uri.fromFile(file));
+            setResult(RESULT_OK, getIntent());
+            finish();
+        } else {
+            try {
+                startActivity(Utils.createOpenFileIntent(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
