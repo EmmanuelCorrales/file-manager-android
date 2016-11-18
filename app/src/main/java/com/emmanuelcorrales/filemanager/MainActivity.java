@@ -12,6 +12,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -48,6 +50,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(mPager, true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.action_change_view);
+        SettingsManager settingsManager = new SettingsManager(this);
+        if (settingsManager.isListView()) {
+            showGridView(item);
+        } else {
+            showListView(item);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_change_view:
+                SettingsManager settingsManager = new SettingsManager(this);
+                if (settingsManager.isListView()) {
+                    showListView(item);
+                    settingsManager.setListView(false);
+                } else {
+                    showGridView(item);
+                    settingsManager.setListView(true);
+                }
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -132,6 +164,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+    }
+
+    private void showListView(MenuItem item) {
+        item.setIcon(getResources().getDrawable(R.drawable.ic_menu_gridview));
+        item.setTitle(R.string.action_gridview);
+    }
+
+    private void showGridView(MenuItem item) {
+        item.setIcon(getResources().getDrawable(R.drawable.ic_menu_listview));
+        item.setTitle(R.string.action_listview);
     }
 
     private static ArrayList<String> convertFilesToStrings(List<File> files) {

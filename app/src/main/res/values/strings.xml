@@ -2,4 +2,6 @@
     <string name="app_name">File Manager</string>
     <string name="snackbar_close_txt">Close File Manager?</string>
     <string name="snackbar_close_btn">CLOSE</string>
+    <string name="action_gridview">Grid view</string>
+    <string name="action_listview">List view</string>
 </resources>
