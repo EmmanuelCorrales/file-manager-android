@@ -3,6 +3,7 @@
     package="com.emmanuelcorrales.filemanager">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,10 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="10559831ec009d736babc1f20a846043c7be0e60" />
     </application>
 
 </manifest>
