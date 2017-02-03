@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.emmanuelcorrales.android.utils.FileUtils;
+
 import java.io.File;
 
 
@@ -129,7 +131,7 @@ public class FilesFragment extends Fragment implements FilesAdapter.OnItemClicke
     }
 
     private void initRecyclerView() {
-        if (!Utils.isExternalStorageReadable()) {
+        if (!FileUtils.isExternalStorageReadable()) {
             Log.d(TAG, "External storage is not readable.");
             return;
         }
