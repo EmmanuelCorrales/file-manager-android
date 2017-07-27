@@ -51,7 +51,7 @@ public class MainActivity extends AnalyticsActivity implements View.OnClickListe
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        ArrayList<String> paths = convertFilesToStrings(mDirectories);
+        ArrayList<String> paths = Utils.convertFilesToStrings(mDirectories);
         outState.putStringArrayList(KEY_PATHS, paths);
         super.onSaveInstanceState(outState);
     }
@@ -118,7 +118,7 @@ public class MainActivity extends AnalyticsActivity implements View.OnClickListe
     private void restoreState(Bundle savedInstanceState) {
         ArrayList<String> paths = savedInstanceState.getStringArrayList(KEY_PATHS);
         if (paths != null) {
-            mDirectories = convertStringsToFiles(paths);
+            mDirectories = Utils.convertStringsToFiles(paths);
         }
 
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -133,25 +133,4 @@ public class MainActivity extends AnalyticsActivity implements View.OnClickListe
         }
     }
 
-    private static ArrayList<String> convertFilesToStrings(List<File> files) {
-        if (files == null) {
-            throw new IllegalArgumentException("Argument 'files' cannot be null.");
-        }
-        ArrayList<String> paths = new ArrayList<>();
-        for (File file : files) {
-            paths.add(file.getAbsolutePath());
-        }
-        return paths;
-    }
-
-    private static ArrayList<File> convertStringsToFiles(List<String> paths) {
-        if (paths == null) {
-            throw new IllegalArgumentException("Argument 'paths' cannot be null.");
-        }
-        ArrayList<File> files = new ArrayList<>();
-        for (String path : paths) {
-            files.add(new File(path));
-        }
-        return files;
-    }
 }

@@ -8,6 +8,8 @@ import com.emmanuelcorrales.android.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 
@@ -102,5 +104,27 @@ public class Utils {
             return R.drawable.ic_calendar;
         }
         return R.drawable.ic_file;
+    }
+
+    static ArrayList<String> convertFilesToStrings(List<File> files) {
+        if (files == null) {
+            throw new IllegalArgumentException("Argument 'files' cannot be null.");
+        }
+        ArrayList<String> paths = new ArrayList<>();
+        for (File file : files) {
+            paths.add(file.getAbsolutePath());
+        }
+        return paths;
+    }
+
+    static ArrayList<File> convertStringsToFiles(List<String> paths) {
+        if (paths == null) {
+            throw new IllegalArgumentException("Argument 'paths' cannot be null.");
+        }
+        ArrayList<File> files = new ArrayList<>();
+        for (String path : paths) {
+            files.add(new File(path));
+        }
+        return files;
     }
 }
